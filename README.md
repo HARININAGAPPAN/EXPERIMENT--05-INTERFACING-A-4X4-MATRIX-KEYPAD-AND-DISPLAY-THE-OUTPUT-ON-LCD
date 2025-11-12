@@ -1,4 +1,4 @@
-# EXPERIMENT--05-INTERFACING-A-4X4-MATRIX-KEYPAD-AND-DISPLAY-THE-OUTPUT-ON-LCD
+<img width="971" height="791" alt="image" src="https://github.com/user-attachments/assets/b94e45f1-f871-4a82-9570-241890f1c5a2" /><img width="971" height="791" alt="image" src="https://github.com/user-attachments/assets/d764b6ed-8466-4ddd-bf84-eb1f642130d1" /># EXPERIMENT--05-INTERFACING-A-4X4-MATRIX-KEYPAD-AND-DISPLAY-THE-OUTPUT-ON-LCD
 
 ## Aim: 
 To Interface a 4X4 matrix keypad and show the output on 16X2 LCD display to ARM controller , and simulate it in Proteus
@@ -177,180 +177,176 @@ https://engineeringxpert.com/wp-content/uploads/2022/04/26.png
 
 ![image](https://user-images.githubusercontent.com/36288975/233856904-99eb708a-c907-4595-9025-c9dbd89b8879.png)
 
+# CIRCUIT DIAGRAM
+
+
+<img width="575" height="532" alt="image" src="https://github.com/user-attachments/assets/911791e0-1f77-41b3-9b80-29b075d215b0" />
+
 ## STM 32 CUBE PROGRAM :
 ```
 #include "main.h"
-#include <stdbool.h>
 #include "lcd.h"
+#include <stdbool.h>
+
 bool col1,col2,col3,col4;
-void key();
+
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
+
+void key(void);
+Lcd_PortType ports[] = {GPIOA,GPIOA,GPIOA,GPIOA};
+Lcd_PinType pins[] = {GPIO_PIN_3,GPIO_PIN_2,GPIO_PIN_1,GPIO_PIN_0};
+Lcd_HandleTypeDef lcd;
+
 int main(void)
 {
-  HAL_Init();
-  SystemClock_Config();
-  MX_GPIO_Init();
-  while (1)
+ HAL_Init();
+ SystemClock_Config();
+ MX_GPIO_Init();
+ while (1)
   {
-	  key();
-	  HAL_Delay(500);
+   key();
   }
 }
 void key()
 {
-	Lcd_PortType ports[] = { GPIOA, GPIOA, GPIOA, GPIOA };
-	Lcd_PinType pins[] = {GPIO_PIN_3, GPIO_PIN_2, GPIO_PIN_1, GPIO_PIN_0};
 	Lcd_HandleTypeDef lcd;
-	lcd = Lcd_create(ports, pins, GPIOB, GPIO_PIN_0, GPIOB, GPIO_PIN_1, LCD_4_BIT_MODE);
-
+	lcd = Lcd_create(ports,pins,GPIOB,GPIO_PIN_0,GPIOB,GPIO_PIN_1,LCD_4_BIT_MODE);
 	HAL_GPIO_WritePin(GPIOC,GPIO_PIN_0,GPIO_PIN_RESET);
 	HAL_GPIO_WritePin(GPIOC,GPIO_PIN_1,GPIO_PIN_SET);
 	HAL_GPIO_WritePin(GPIOC,GPIO_PIN_2,GPIO_PIN_SET);
 	HAL_GPIO_WritePin(GPIOC,GPIO_PIN_3,GPIO_PIN_SET);
 
-	col1 =HAL_GPIO_ReadPin(GPIOC,GPIO_PIN_4);
-	col2 =HAL_GPIO_ReadPin(GPIOC,GPIO_PIN_5);
-	col3 =HAL_GPIO_ReadPin(GPIOC,GPIO_PIN_6);
-	col4 =HAL_GPIO_ReadPin(GPIOC,GPIO_PIN_7);
+	col1 = HAL_GPIO_ReadPin(GPIOC,GPIO_PIN_4);
+	col2 = HAL_GPIO_ReadPin(GPIOC,GPIO_PIN_5);
+	col3 = HAL_GPIO_ReadPin(GPIOC,GPIO_PIN_6);
+	col4 = HAL_GPIO_ReadPin(GPIOC,GPIO_PIN_7);
+	Lcd_cursor(&lcd,0,1);
 
- 	if(!col1)
-	{
-		Lcd_cursor(&lcd,0,1);
-		Lcd_string(&lcd, "key7\n");
-		col1=1;
+	if(!col1){
+		Lcd_string(&lcd,"Key 7\n");
+		HAL_Delay(1000);
 	}
-	if(!col2)
-		{
-			Lcd_cursor(&lcd,0,1);
-			Lcd_string(&lcd, "key8\n");
-			col2=1;
+	else if(!col2){
+		Lcd_string(&lcd,"Key 8\n");
+		HAL_Delay(1000);
+	}
+	else if(!col3){
+			Lcd_string(&lcd,"Key 9\n");
+			HAL_Delay(1000);
 		}
-	if(!col3)
-		{
-			Lcd_cursor(&lcd,0,1);
-			Lcd_string(&lcd, "key9\n");
-			col3=1;
-		}
-	if(!col4)
-		{
-			Lcd_cursor(&lcd,0,1);
-			Lcd_string(&lcd, "key/\n");
-			col4=1;
+	else if(!col4){
+			Lcd_string(&lcd,"Key %\n");
+			HAL_Delay(1000);
 		}
 
-	HAL_GPIO_WritePin(GPIOC,GPIO_PIN_0,GPIO_PIN_SET);
+
+	lcd = Lcd_create(ports,pins,GPIOB,GPIO_PIN_0,GPIOB,GPIO_PIN_1,LCD_4_BIT_MODE);
+		HAL_GPIO_WritePin(GPIOC,GPIO_PIN_0,GPIO_PIN_SET);
 		HAL_GPIO_WritePin(GPIOC,GPIO_PIN_1,GPIO_PIN_RESET);
 		HAL_GPIO_WritePin(GPIOC,GPIO_PIN_2,GPIO_PIN_SET);
 		HAL_GPIO_WritePin(GPIOC,GPIO_PIN_3,GPIO_PIN_SET);
-		col1 =HAL_GPIO_ReadPin(GPIOC,GPIO_PIN_4);
-		col2 =HAL_GPIO_ReadPin(GPIOC,GPIO_PIN_5);
-		col3 =HAL_GPIO_ReadPin(GPIOC,GPIO_PIN_6);
-		col4 =HAL_GPIO_ReadPin(GPIOC,GPIO_PIN_7);
 
-		if(!col1)
-		{
-			Lcd_cursor(&lcd,0,1);
-			Lcd_string(&lcd, "key4\n");
-			col1=1;
+		col1 = HAL_GPIO_ReadPin(GPIOC,GPIO_PIN_4);
+		col2 = HAL_GPIO_ReadPin(GPIOC,GPIO_PIN_5);
+		col3 = HAL_GPIO_ReadPin(GPIOC,GPIO_PIN_6);
+		col4 = HAL_GPIO_ReadPin(GPIOC,GPIO_PIN_7);
+		Lcd_cursor(&lcd,0,1);
+
+		if(!col1){
+			Lcd_string(&lcd,"Key 4\n");
+			HAL_Delay(1000);
 		}
-		if(!col2)
-			{
-				Lcd_cursor(&lcd,0,1);
-				Lcd_string(&lcd, "key5\n");
-				col2=1;
+		else if(!col2){
+			Lcd_string(&lcd,"Key 5\n");
+			HAL_Delay(1000);
+		}
+		else if(!col3){
+				Lcd_string(&lcd,"Key 6\n");
+				HAL_Delay(1000);
 			}
-		if(!col3)
-			{
-				Lcd_cursor(&lcd,0,1);
-				Lcd_string(&lcd, "key6\n");
-				col3=1;
+		else if(!col4){
+				Lcd_string(&lcd,"Key x\n");
+				HAL_Delay(1000);
 			}
-		if(!col4)
-			{
-				Lcd_cursor(&lcd,0,1);
-				Lcd_string(&lcd, "key*\n");
-				col4=1;
-			}
- 		HAL_GPIO_WritePin(GPIOC,GPIO_PIN_0,GPIO_PIN_SET);
-				HAL_GPIO_WritePin(GPIOC,GPIO_PIN_1,GPIO_PIN_SET);
-				HAL_GPIO_WritePin(GPIOC,GPIO_PIN_2,GPIO_PIN_RESET);
-				HAL_GPIO_WritePin(GPIOC,GPIO_PIN_3,GPIO_PIN_SET);
 
-				col1 =HAL_GPIO_ReadPin(GPIOC,GPIO_PIN_4);
-				col2 =HAL_GPIO_ReadPin(GPIOC,GPIO_PIN_5);
-				col3 =HAL_GPIO_ReadPin(GPIOC,GPIO_PIN_6);
-				col4 =HAL_GPIO_ReadPin(GPIOC,GPIO_PIN_7);
+		lcd = Lcd_create(ports,pins,GPIOB,GPIO_PIN_0,GPIOB,GPIO_PIN_1,LCD_4_BIT_MODE);
+			HAL_GPIO_WritePin(GPIOC,GPIO_PIN_0,GPIO_PIN_SET);
+			HAL_GPIO_WritePin(GPIOC,GPIO_PIN_1,GPIO_PIN_SET);
+			HAL_GPIO_WritePin(GPIOC,GPIO_PIN_2,GPIO_PIN_RESET);
+			HAL_GPIO_WritePin(GPIOC,GPIO_PIN_3,GPIO_PIN_SET);
 
-				if(!col1)
-				{
-					Lcd_cursor(&lcd,0,1);
-					Lcd_string(&lcd, "key1\n");
-					col1=1;
+			col1 = HAL_GPIO_ReadPin(GPIOC,GPIO_PIN_4);
+			col2 = HAL_GPIO_ReadPin(GPIOC,GPIO_PIN_5);
+			col3 = HAL_GPIO_ReadPin(GPIOC,GPIO_PIN_6);
+			col4 = HAL_GPIO_ReadPin(GPIOC,GPIO_PIN_7);
+			Lcd_cursor(&lcd,0,1);
+
+			if(!col1){
+				Lcd_string(&lcd,"Key 1\n");
+				HAL_Delay(1000);
+			}
+			else if(!col2){
+				Lcd_string(&lcd,"Key 2\n");
+				HAL_Delay(1000);
+			}
+			else if(!col3){
+					Lcd_string(&lcd,"Key 3\n");
+					HAL_Delay(1000);
 				}
-				if(!col2)
-					{
-						Lcd_cursor(&lcd,0,1);
-						Lcd_string(&lcd, "key2\n");
-						col2=1;
-					}
-				if(!col3)
-					{
-						Lcd_cursor(&lcd,0,1);
-						Lcd_string(&lcd, "key3\n");
-						col3=1;
-					}
-				if(!col4)
-					{
-						Lcd_cursor(&lcd,0,1);
-						Lcd_string(&lcd, "key-\n");
-						col4=1;
-					}
- 				HAL_GPIO_WritePin(GPIOC,GPIO_PIN_0,GPIO_PIN_SET);
-						HAL_GPIO_WritePin(GPIOC,GPIO_PIN_1,GPIO_PIN_SET);
-						HAL_GPIO_WritePin(GPIOC,GPIO_PIN_2,GPIO_PIN_SET);
-						HAL_GPIO_WritePin(GPIOC,GPIO_PIN_3,GPIO_PIN_RESET);
+			else if(!col4){
+					Lcd_string(&lcd,"Key -\n");
+					HAL_Delay(1000);
+				}
 
-						col1 =HAL_GPIO_ReadPin(GPIOC,GPIO_PIN_4);
-						col2 =HAL_GPIO_ReadPin(GPIOC,GPIO_PIN_5);
-						col3 =HAL_GPIO_ReadPin(GPIOC,GPIO_PIN_6);
-						col4 =HAL_GPIO_ReadPin(GPIOC,GPIO_PIN_7);
-						if(!col1)
-						{
-							Lcd_cursor(&lcd,0,1);
-							Lcd_string(&lcd, "keyON/ac\n");
-							col1=1;
-						}
-						if(!col2)
-							{
-								Lcd_cursor(&lcd,0,1);
-								Lcd_string(&lcd, "key0\n");
-								col2=1;
-							}
-						if(!col3)
-							{
-								Lcd_cursor(&lcd,0,1);
-								Lcd_string(&lcd, "key=\n");
-								col3=1;
-							}
-						if(!col4)
-							{
-								Lcd_cursor(&lcd,0,1);
-								Lcd_string(&lcd, "key+\n");
-								col4=1;
-							}
-						HAL_Delay(500);
+			lcd = Lcd_create(ports,pins,GPIOB,GPIO_PIN_0,GPIOB,GPIO_PIN_1,LCD_4_BIT_MODE);
+				HAL_GPIO_WritePin(GPIOC,GPIO_PIN_0,GPIO_PIN_SET);
+				HAL_GPIO_WritePin(GPIOC,GPIO_PIN_1,GPIO_PIN_SET);
+				HAL_GPIO_WritePin(GPIOC,GPIO_PIN_2,GPIO_PIN_SET);
+				HAL_GPIO_WritePin(GPIOC,GPIO_PIN_3,GPIO_PIN_RESET);
+
+				col1 = HAL_GPIO_ReadPin(GPIOC,GPIO_PIN_4);
+				col2 = HAL_GPIO_ReadPin(GPIOC,GPIO_PIN_5);
+				col3 = HAL_GPIO_ReadPin(GPIOC,GPIO_PIN_6);
+				col4 = HAL_GPIO_ReadPin(GPIOC,GPIO_PIN_7);
+				Lcd_cursor(&lcd,0,1);
+
+				if(!col1){
+					Lcd_string(&lcd,"Key ON/C\n");
+					HAL_Delay(1000);
+				}
+				else if(!col2){
+					Lcd_string(&lcd,"Key 0\n");
+					HAL_Delay(1000);
+				}
+				else if(!col3){
+						Lcd_string(&lcd,"Key =\n");
+						HAL_Delay(1000);
+					}
+				else if(!col4){
+						Lcd_string(&lcd,"Key +\n");
+						HAL_Delay(1000);
+					}
+
+
 
 }
+
+
 ```
 
 
 ## Output screen shots of proteus  :
- ![Screenshot (7)](https://github.com/user-attachments/assets/7f18aa77-5bbd-4b26-93cc-9423e8a76eae)
+ <img width="1066" height="746" alt="image" src="https://github.com/user-attachments/assets/48cec6ba-7faa-49da-9605-c69ff1557fd3" />
+ 
+ <img width="609" height="430" alt="image" src="https://github.com/user-attachments/assets/753ded8c-9cae-4ef0-9ab1-73751140c919" />
+
+
 
  
  ## CIRCUIT DIAGRAM (EXPORT THE GRAPHICS TO PDF AND ADD THE SCREEN SHOT HERE): 
- ![Screenshot 2025-04-25 143931](https://github.com/user-attachments/assets/d7f27347-308b-4d36-bf0a-586dee3e2c5c)
+
+<img width="971" height="791" alt="image" src="https://github.com/user-attachments/assets/e015b6db-2582-4ca4-97b9-051fe0a8027a" />
 
  
 ## Result :
