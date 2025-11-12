@@ -1,4 +1,4 @@
-<img width="971" height="791" alt="image" src="https://github.com/user-attachments/assets/b94e45f1-f871-4a82-9570-241890f1c5a2" /><img width="971" height="791" alt="image" src="https://github.com/user-attachments/assets/d764b6ed-8466-4ddd-bf84-eb1f642130d1" /># EXPERIMENT--05-INTERFACING-A-4X4-MATRIX-KEYPAD-AND-DISPLAY-THE-OUTPUT-ON-LCD
+# EXPERIMENT--05-INTERFACING-A-4X4-MATRIX-KEYPAD-AND-DISPLAY-THE-OUTPUT-ON-LCD
 
 ## Aim: 
 To Interface a 4X4 matrix keypad and show the output on 16X2 LCD display to ARM controller , and simulate it in Proteus
